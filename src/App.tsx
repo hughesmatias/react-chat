@@ -36,12 +36,17 @@ const App = () => {
 
   const [user] = useAuthState(auth);
 
+  const signOutEvent = () => auth.signOut();
+
   return (
     <div className="App">
       <header></header>
       <section>
         {user ? (
-          <ChatRoom />
+          <>
+            <button onClick={signOutEvent}>Sign out</button>
+            <ChatRoom />
+          </>
         ) : (
           <SignIn
             googleProvider={firebase.auth.GoogleAuthProvider}
