@@ -4,7 +4,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import SignIn from './components/signIn';
 import ChatRoom from './components/chatRoom';
@@ -18,7 +17,6 @@ const {
   REACT_APP_messagingSenderId: messagingSenderId,
   REACT_APP_appId: appId,
 } = process.env;
-console.log(process.env);
 
 firebase.initializeApp({
   apiKey,
@@ -45,7 +43,7 @@ const App = () => {
         {user ? (
           <>
             <button onClick={signOutEvent}>Sign out</button>
-            <ChatRoom />
+            <ChatRoom messageRef={firestore.collection('messages')} auth={auth} />
           </>
         ) : (
           <SignIn
