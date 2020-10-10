@@ -10,7 +10,10 @@ const ChatMessage = ({
   own,
 }: ChatMessage) => {
   return (
-    <div className={own ? 'sent' : 'received'}>{message.msj}</div>
+    <div className={own ? 'sent' : 'received'}>
+      <img src={message.photoURL} alt=""/>
+      <p>{message.msj}</p>
+    </div>
   );
 };
 

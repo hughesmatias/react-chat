@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, EventHandler, SyntheticEvent } from "react";
 import firebase from "firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
@@ -9,13 +9,36 @@ interface ChatRoomInterface {
   auth: firebase.auth.Auth;
 }
 
+interface UserInterface {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  emailVerified: boolean;
+}
+
 const ChatRoom = ({ messageRef, auth }: ChatRoomInterface) => {
   const query = messageRef.orderBy("createAt").limit(25);
   const [messages] = useCollectionData(query, { idField: "id" });
+  const [formValue, setFormValue] = useState("");
 
-  console.log(messages, 'messages');
+  const handleMessage = (event: any) => {
+    setFormValue(event.target.value);
+  };
 
-  console.log(auth.currentUser, 'currentUser');
+  const sendMessage = async (e: any) => {
+    e.preventDefault();
+    await messageRef.add({
+      msj: formValue,
+      createAt: firebase.firestore.FieldValue.serverTimestamp(),
+      photoURL: auth.currentUser?.photoURL || false,
+      uid: auth.currentUser?.uid || false,
+    });
+
+    setFormValue("");
+  };
+
+  console.log(messages, "messages");
 
   return (
     <div>
@@ -27,11 +50,20 @@ const ChatRoom = ({ messageRef, auth }: ChatRoomInterface) => {
               <ChatMessage
                 key={message.id}
                 message={message}
-                own={auth.currentUser && message.uid === auth.currentUser.uid || false}
+                own={
+                  (auth.currentUser && message.uid === auth.currentUser.uid) ||
+                  false
+                }
               />
             </li>
           ))}
       </ul>
+      {auth && (
+        <form onSubmit={sendMessage}>
+          <input type="text" onChange={handleMessage} value={formValue} />
+          <button type="submit">Enviar</button>
+        </form>
+      )}
     </div>
   );
 };
