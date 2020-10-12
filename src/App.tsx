@@ -8,6 +8,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import SignIn from './components/signIn';
 import ChatRoom from './components/chatRoom';
 
+import './App.scss';
+
 const {
   REACT_APP_apiKey: apiKey,
   REACT_APP_authDomain: authDomain,
@@ -38,18 +40,15 @@ const App = () => {
 
   return (
     <div className="App">
-      <header></header>
+      <header>
+        {user ? <button onClick={signOutEvent}>Sign out</button> : <SignIn
+          googleProvider={firebase.auth.GoogleAuthProvider}
+          auth={auth}
+        />}
+      </header>
       <section>
-        {user ? (
-          <>
-            <button onClick={signOutEvent}>Sign out</button>
-            <ChatRoom messageRef={firestore.collection('messages')} auth={auth} />
-          </>
-        ) : (
-          <SignIn
-            googleProvider={firebase.auth.GoogleAuthProvider}
-            auth={auth}
-          />
+        {user && (
+          <ChatRoom messageRef={firestore.collection('messages')} auth={auth} />
         )}
       </section>
     </div>

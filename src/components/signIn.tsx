@@ -15,7 +15,7 @@ const SignIn = ({
   };
 
   return (
-    <button type="button" onClick={signInEvent}>SignIn</button>
+    <button type="button" onClick={signInEvent}>Sign In</button>
   );
 };
 

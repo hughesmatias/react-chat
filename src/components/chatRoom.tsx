@@ -38,11 +38,10 @@ const ChatRoom = ({ messageRef, auth }: ChatRoomInterface) => {
     setFormValue("");
   };
 
-  console.log(messages, "messages");
 
   return (
-    <div>
-      ChatRoom
+    <div className="chatroom">
+      <h2>ChatRoom</h2>
       <ul>
         {messages &&
           messages.map((message: any) => (
@@ -59,7 +58,7 @@ const ChatRoom = ({ messageRef, auth }: ChatRoomInterface) => {
           ))}
       </ul>
       {auth && (
-        <form onSubmit={sendMessage}>
+        <form className="sendmessage" onSubmit={sendMessage}>
           <input type="text" onChange={handleMessage} value={formValue} />
           <button type="submit">Enviar</button>
         </form>
